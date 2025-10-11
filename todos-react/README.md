@@ -1,70 +1,234 @@
-# Getting Started with Create React App
+### Creating a react  application
+```bash
+ npx create-react-app todos-react
+ cd todos-react
+ ```
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+ ### Component Login.js
+```jsx
+import React, {useState} from "react"
 
-## Available Scripts
+const Login = () => {
+    const[username,setUsername] = useState('');
+    const[password,setPassword] = useState('');
 
-In the project directory, you can run:
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log(`username: `,username);
+    }
 
-### `npm start`
+    return  (
+        <form onSubmit={handleSubmit}>
+            <input
+                type="text"
+                placeholder="Username"
+                value = {username}
+                onChange={(e) => setUsername(e.target.value)}
+            />
+            
+            <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+            />
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+            <button type="submit">Login</button>
+        </form>
+    );
+};
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+export default Login;
 
-### `npm test`
+```
+### Create Welcome.js Component
+```jsx
+import React from "react";
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+const Welcome = ( {username} ) => {
+    return (
+        <div>
+            <h1> Welcome , { Username } !</h1>
+        </div>
+    );
+};
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+export default Welcome;
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Install React Router ( Navigational )
+```bash
+npm install react-router-dom
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Update Login Component
+```jsx
+import React, {useState} from "react"
+// useNavigate state
+import { useNavigate} from 'react-router-dom';
 
-### `npm run eject`
+const Login = () => {
+    const[username,setUsername] = useState('');
+    const[password,setPassword] = useState('');
+    const navigate = useNavigate();
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+    // create a event handler
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        //console.log(`username: `,username);
+        if ( username && password ) {
+            navigate(`/welcome/${username}`);
+        }
+    }
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+    return  (
+        <form onSubmit={handleSubmit}>
+            <input
+                type="text"
+                placeholder="Username"
+                value = {username}
+                onChange={(e) => setUsername(e.target.value)}
+            />
+            
+            <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+            />
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+            <button type="submit">Login</button>
+        </form>
+    );
+};
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+export default Login;
+```
 
-## Learn More
+## Update Welcome Component to Read 'username' 
+# make use of hook 'useParam'
+```jsx
+import React from "react";
+import { useParams } from 'react-router-dom';
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+const Welcome = () => {
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+    const {username} = useParams();
 
-### Code Splitting
+    return (
+        <div>
+            <h1> Welcome , { username } !</h1>
+        </div>
+    );
+};
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+export default Welcome;
+```
 
-### Analyzing the Bundle Size
+### Update App Componet With Router
+```jsx
+import React from "react";
+import { BrowserRouter as Router,Routes, Route} from 'react-router-dom';
+import Login from "./Login";
+import Welcome from "./Welcome";
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
 
-### Making a Progressive Web App
+function App() {
+  return (
+   <Router>
+    <div className="App">
+      <Routes>
+        <Route path="/" element= {<Login/>} />
+        <Route path="/welcome/:username" element={<Welcome/>} />
+      </Routes>
+    </div>
+   </Router>
+  );
+}
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+export default App;
 
-### Advanced Configuration
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+```
 
-### Deployment
+### What is a Service in React ?
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+seperate javascript/module
+Data Management  ( localstorage, authentication , etc)
+API calls
+Business Login 
 
-### `npm run build` fails to minify
+## Basic Authentication
+# Create Authentication Service (src/services/authService.js)
+```jsx
+class AuthService {
+    authenticate (username, password) {
+        // HArdcoded validation
+        if ( username === 'vinodh' && password === 'password123') {
+            return { success: true, message: "Login successfull"};
+        }
+        return { success: false, message: 'Invalid credentials'}
+    }
+}
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+export default new AuthService();
+
+```
+
+# Update Login.js to make use of AuthenticationService
+```jsx
+import React, {useState} from "react"
+// useNavigate state
+import { useNavigate} from 'react-router-dom';
+
+
+import authService from "./services/authService";
+
+const Login = () => {
+    const[username,setUsername] = useState('');
+    const[password,setPassword] = useState('');
+    const [error,setError] = useState('');
+
+    const navigate = useNavigate();
+
+    // create a event handler
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        //console.log(`username: `,username);
+
+        const result = authService.authenticate(username,password);
+
+        if ( result.success ) {
+            navigate(`/welcome/${username}`);
+        }else {
+            setError(result.message);
+        }
+    }
+
+    return  (
+        <form onSubmit={handleSubmit}>
+            {error && <div style={{color:'red'}}>{error}</div>}
+            <input
+                type="text"
+                placeholder="Username"
+                value = {username}
+                onChange={(e) => setUsername(e.target.value)}
+            />
+            
+            <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+            />
+
+            <button type="submit">Login</button>
+        </form>
+    );
+};
+
+export default Login;
+```
+
+
