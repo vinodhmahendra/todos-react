@@ -1,5 +1,6 @@
+import { AuthResult } from '../types/index.ts';
 class AuthService {
-    authenticate (username, password) {
+    authenticate (username:string, password: string):  AuthResult {
         // HArdcoded validation
         if ( username === 'vinodh' && password === 'password123') {
             localStorage.setItem('user',username);
@@ -22,3 +23,5 @@ class AuthService {
 }
 
 export default new AuthService();
+// const authService = new AuthService();
+// export default authService;

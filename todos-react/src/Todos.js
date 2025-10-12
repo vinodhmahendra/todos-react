@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import todoService from './services/todoService';
 import { useParams ,Link ,useNavigate} from 'react-router-dom';
-import authService from "./services/authService";
+import authService from "./services/authService.ts";
 
 const Todos = () => {
     const { username } = useParams();

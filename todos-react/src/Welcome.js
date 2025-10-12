@@ -1,6 +1,6 @@
 import React from "react";
 import { useParams,Link, useNavigate } from 'react-router-dom';
-import authService from "./services/authService";
+import authService from "./services/authService.ts";
 
 const Welcome = () => {
 
