@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import todoService from './services/todoService';
-import { useParams } from 'react-router-dom';
+import { useParams ,Link ,useNavigate} from 'react-router-dom';
+import authService from "./services/authService";
 
 const Todos = () => {
     const { username } = useParams();
+    const navigate = useNavigate();
     const [todos, setTodos] = useState([]);
     const [newTodo, setNewTodo] = useState('');
     const [filter, setFilter] = useState('all');
@@ -34,11 +36,19 @@ const Todos = () => {
         todoService.deleteTodo(id);
         setTodos(todoService.getAllTodos()); // update the virtual dom
     }
+
+    const handleLogout = () => {
+        authService.logout();
+        navigate('/');
+    };
+
     const filteredTodos = todoService.getFilteredTodos(filter);
 
     return (
         <div>
             <h1> {username} Todos</h1>
+            <Link to={`/welcome/${username}`}> Back to Welcome</Link>
+            <button onClick={handleLogout}>Logout</button>
 
 
             <form onSubmit={handleAddTodo}>
