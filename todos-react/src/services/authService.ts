@@ -3,22 +3,22 @@ class AuthService {
     authenticate (username:string, password: string):  AuthResult {
         // HArdcoded validation
         if ( username === 'vinodh' && password === 'password123') {
-            localStorage.setItem('user',username);
+            sessionStorage.setItem('user',username);
             return { success: true, message: "Login successfull"};
         }
         return { success: false, message: 'Invalid credentials'}
     }
 
     isAuthenticated() {
-        return localStorage.getItem('user') !== null;
+        return sessionStorage.getItem('user') !== null;
     }
 
     getCurrentUser() {
-        return localStorage.getItem('user');
+        return sessionStorage.getItem('user');
     }
 
     logout() {
-        localStorage.removeItem('user');
+        sessionStorage.removeItem('user');
     }
 }
 

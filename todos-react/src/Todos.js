@@ -14,6 +14,13 @@ const Todos = () => {
         setTodos(todoService.getAllTodos());
     }, []);
 
+    // const [todo,setTodos] = useState([]);
+    // useEffect( ()=> {
+    //     fetch('/api/todos')
+    //     .then(res => res.json())
+    //     .then(data => setTodos(data));
+    // },[]);
+
     const handleAddTodo = (e) => {
         e.preventDefault();
         // console.log(`handleAddTodo called`);
