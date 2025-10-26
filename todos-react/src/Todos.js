@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import todoService from './services/todoService';
 import { useParams ,Link ,useNavigate} from 'react-router-dom';
 import authService from "./services/authService.ts";
+import { useSessionStorage } from "./hooks/useSessionStorage.js";
 
 const Todos = () => {
     const { username } = useParams();
     const navigate = useNavigate();
-    const [todos, setTodos] = useState([]);
+   // const [todos, setTodos] = useState([]);
+    const [todos, setTodos] = useSessionStorage('todos',[]);
     const [newTodo, setNewTodo] = useState('');
     const [filter, setFilter] = useState('all');
 

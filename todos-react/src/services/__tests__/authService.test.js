@@ -25,7 +25,7 @@ describe('AuthService', () => {
         expect ( authService.isAuthenticated()).toBe(true);
     });
 
-    test (' logs out user', () => {
+    test ('logs out user', () => {
         sessionStorage.setItem('user','vinodh');
         authService.logout();
         expect( sessionStorage.getItem('user')).toBeNull();
