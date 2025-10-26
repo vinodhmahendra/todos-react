@@ -5,7 +5,7 @@ import { useNavigate} from 'react-router-dom';
 
 import authService from "./services/authService.ts";
 
-const Login = () => {
+const Login = ( {onLoginSuccess}) => {
     const[username,setUsername] = useState('');
     const[password,setPassword] = useState('');
     const [error,setError] = useState('');
@@ -26,7 +26,8 @@ const Login = () => {
         const result = authService.authenticate(username,password);
 
         if ( result.success ) {
-            navigate(`/welcome/${username}`);
+            // navigate(`/welcome/${username}`);
+            onLoginSuccess(username);
         }else {
             setError(result.message);
         }

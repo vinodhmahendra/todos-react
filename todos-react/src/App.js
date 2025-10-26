@@ -1,21 +1,45 @@
-import React from "react";
-import { BrowserRouter as Router,Routes, Route} from 'react-router-dom';
+import React, {useState, useEffect} from "react";
+import { BrowserRouter as Router,Routes, Route, useNavigate} from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Login from "./Login";
 import Welcome from "./Welcome";
 import Todos from "./Todos";
 import ProtectedRoute from "./ProtectedRoute";
 import Error from "./Error";
+import Menu from "./components/Menu";
+import authService from "./services/authService.ts";
 
 const queryClient = new QueryClient();
 
-function App() {
+function AppLayout () {
+
+
+  const [isAuthenticated, setIsAuthenticated] = useState(authService.isAuthenticated());
+
+  const navigate = useNavigate();
+
+  const handleLoginSuccess = ( username ) => {
+    setIsAuthenticated(true);
+    navigate(`/welcome/${username}`)
+  }
+
+  const handleLogout = () => {
+    authService.logout();
+    setIsAuthenticated(false);
+    navigate('/');
+  }
+
   return (
-  <QueryClientProvider client={queryClient}>
-  <Router>
+    <>
+      <Menu
+      isAuthenticated= { () => isAuthenticated}
+      getCurrentUser={authService.getCurrentUser}
+      logout={ handleLogout }
+      />
+
     <div className="App">
       <Routes>
-        <Route path="/" element= {<Login/>} />
+        <Route path="/" element= {<Login onLoginSuccess={handleLoginSuccess}/>} />
         <Route 
           path="/welcome/:username" 
           element={
@@ -33,7 +57,19 @@ function App() {
 
       </Routes>
     </div>
-   </Router>
+
+    </>
+  );
+
+}
+
+function App() {
+
+  return (
+    <QueryClientProvider client={queryClient}>
+     <Router>
+      <AppLayout />
+    </Router>
    </QueryClientProvider>
   );
 }

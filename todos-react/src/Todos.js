@@ -7,8 +7,8 @@ import { useSessionStorage } from "./hooks/useSessionStorage.js";
 const Todos = () => {
     const { username } = useParams();
     const navigate = useNavigate();
-   // const [todos, setTodos] = useState([]);
-    const [todos, setTodos] = useSessionStorage('todos',[]);
+   const [todos, setTodos] = useState([]);
+    // const [todos, setTodos] = useSessionStorage('todos',[]);
     const [newTodo, setNewTodo] = useState('');
     const [filter, setFilter] = useState('all');
 
